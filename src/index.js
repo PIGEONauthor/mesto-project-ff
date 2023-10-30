@@ -1,8 +1,9 @@
 // импорт
 
 import './pages/index.css';
-import {initialCards, createCard, handleDeleteCard, handleLikeCard} from './components/cards.js';
-import {openModal, closeModal, handleCloseByEcs, handleCloseByOverlay} from './components/modal.js';
+import {initialCards} from './components/cards.js';
+import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
+import {openModal, closeModal} from './components/modal.js';
 
 // DOM узлы
 
@@ -24,7 +25,7 @@ const cardPopup = document.querySelector('.popup_type_image');
 const cardPopupImage = cardPopup.querySelector('.popup__image');
 const cardPopupCaption = cardPopup.querySelector('.popup__caption');
 
-const CloseButtonsList = document.querySelectorAll('.popup__close');
+const closeButtonsList = document.querySelectorAll('.popup__close');
 
 const cardsPlace = document.querySelector('.places__list');
 
@@ -48,7 +49,7 @@ profileEditButton.addEventListener('click', () => {
   editFormNameInput.value = profileName.textContent;
   editFormjobInput.value = profileTitle.textContent;
 
-  openModal(profileEditPopup, handleCloseByEcs, handleCloseByOverlay);
+  openModal(profileEditPopup);
 
 });
 
@@ -56,7 +57,7 @@ cardAddButton.addEventListener('click', () => {
   
   cardForm.reset();
 
-  openModal(cardAddPopup, handleCloseByEcs, handleCloseByOverlay);
+  openModal(cardAddPopup);
   
 });
 
@@ -65,7 +66,7 @@ function handleOpenImage(evt){
   cardPopupImage.src = evt.target.src;
   cardPopupImage.alt = cardPopupCaption.textContent = evt.target.alt;
 
-  openModal(cardPopup, handleCloseByEcs, handleCloseByOverlay);
+  openModal(cardPopup);
 
 }
 
@@ -75,11 +76,11 @@ function heandleCloseByX(evt){
 
   const targerPopup = evt.target.closest('.popup');
   
-  closeModal(targerPopup, handleCloseByEcs, handleCloseByOverlay);
+  closeModal(targerPopup);
   
 }
 
-CloseButtonsList.forEach((el) => {
+closeButtonsList.forEach((el) => {
 
   el.addEventListener('click', heandleCloseByX);
 
@@ -87,18 +88,18 @@ CloseButtonsList.forEach((el) => {
 
 // обновление профиля
 
-function handleFormSubmit(evt){
+function handleProfileFormSubmit(evt){
 
   evt.preventDefault();
 
   profileName.textContent = editFormNameInput.value;
   profileTitle.textContent = editFormjobInput.value;
 
-  closeModal(evt.target.closest('.popup'));
+  closeModal(profileEditPopup);
 
 }
 
-profileEditForm.addEventListener('submit', handleFormSubmit);
+profileEditForm.addEventListener('submit', handleProfileFormSubmit);
 
 // добавление новой карточки
 
@@ -113,9 +114,7 @@ function handleAddCard(evt){
 
   renderCard(newCardData, cardsPlace);
 
-  closeModal(evt.target.closest('.popup'));
-
-  cardForm.reset();
+  closeModal(cardAddPopup);
 
 }
 

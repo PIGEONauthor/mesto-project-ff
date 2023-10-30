@@ -1,13 +1,13 @@
 // экспорт
 
-export {openModal, closeModal, handleCloseByEcs, handleCloseByOverlay};
+export {openModal, closeModal};
 
 /*
   *********ОПИСАНИЕ МОДУЛЯ*********
 
   Модуль предоставляет возможность плавного открытия
-и закрытия модальных окон, а также возможность добавить
-закрытие модальных окон по нажатию на overlay или Escape.
+и закрытия модальных окон, а также возможности
+закрытия модальных окон по нажатию на overlay или Escape.
 
   *********ИНСТРУКЦИЯ К МОДУЛЮ*********
 
@@ -39,18 +39,12 @@ export {openModal, closeModal, handleCloseByEcs, handleCloseByOverlay};
 
   Функции openModal() и closeModal() принимают на вход
 "ссылку на модальное окно".
-  При необходимости добавить для окна тот или иной функционал
-закрытия - необоходимо, при вызове функций открытия окна,
-передать в качестве дополнительного аргумента нужную callback-функцию.
 
-  При добавлении своего функционала закрытия окна(напр. по кнопке в UI):
-в функцию closeModal() необходимо передать те callback-функции,
-которые были указаны при открытии этого окна.
 */
 
 // открытие модального окна
 
-function openModal(popup, ...handlers){
+function openModal(popup){
 
   popup.classList.add('popup_is-animated');
     
@@ -59,19 +53,14 @@ function openModal(popup, ...handlers){
     popup.classList.remove('popup_is-animated');
   }, 0);
   
-  if (handlers.includes(handleCloseByEcs)){
-    document.addEventListener('keydown', handleCloseByEcs);
-  }
-
-  if (handlers.includes(handleCloseByOverlay)){
-    document.addEventListener('click', handleCloseByOverlay);
-  }
+  document.addEventListener('keydown', handleCloseByEcs);
+  document.addEventListener('click', handleCloseByOverlay);
 
 }
 
 // закрытие модального окна
 
-function closeModal(popup, ...handlers){
+function closeModal(popup){
 
   popup.classList.add('popup_is-animated');
 
@@ -83,24 +72,18 @@ function closeModal(popup, ...handlers){
     popup.classList.remove('popup_is-animated');
   }, 600);
     
-  if (handlers.includes(handleCloseByEcs)){
-    document.removeEventListener('keydown', handleCloseByEcs);
-  }
-
-  if (handlers.includes(handleCloseByOverlay)){
-    document.removeEventListener('click', handleCloseByOverlay);
-  }
+  document.removeEventListener('keydown', handleCloseByEcs);
+  document.removeEventListener('click', handleCloseByOverlay);
   
 }
 
 // закрытие по кнопке Escape
 
 function handleCloseByEcs(evt){
-
-  const targerPopup = document.querySelector('.popup_is-opened');
   
   if (evt.key === 'Escape'){
-    closeModal(targerPopup, handleCloseByOverlay, handleCloseByEcs);
+    const targerPopup = document.querySelector('.popup_is-opened');
+    closeModal(targerPopup);
   }
   
 }
@@ -108,12 +91,10 @@ function handleCloseByEcs(evt){
 // закрытие по клику на Overlay
 
 function handleCloseByOverlay(evt){
-  
-  const targerPopup = document.querySelector('.popup_is-opened');
-  const eveventTarget = evt.target.classList.value;
-  
-  if (eveventTarget.includes('popup_is-opened')){
-    closeModal(targerPopup, handleCloseByOverlay, handleCloseByEcs);
+    
+  if (evt.target.classList.contains('popup_is-opened')){
+    //const targerPopup = document.querySelector('.popup_is-opened');
+    closeModal(evt.target);
   }
 
 }
