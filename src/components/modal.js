@@ -54,7 +54,7 @@ function openModal(popup){
   }, 0);
   
   document.addEventListener('keydown', handleCloseByEcs);
-  document.addEventListener('click', handleCloseByOverlay);
+  document.addEventListener('mousedown', handleCloseByOverlay);
 
 }
 
@@ -73,7 +73,7 @@ function closeModal(popup){
   }, 600);
     
   document.removeEventListener('keydown', handleCloseByEcs);
-  document.removeEventListener('click', handleCloseByOverlay);
+  document.removeEventListener('mousedown', handleCloseByOverlay);
   
 }
 
