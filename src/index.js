@@ -4,7 +4,7 @@ import './pages/index.css';
 import {initialCards} from './components/cards.js';
 import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
-import {showInputError, hideInputError, isValid} from './components/validation.js';
+import {enableValidation} from './components/validation.js';
 
 // DOM узлы
 
@@ -124,6 +124,15 @@ cardForm.addEventListener('submit', handleAddCard);
 
 // ВАЛИДАЦИЯ
 
-editFormNameInput.addEventListener('input', () => {
-  isValid(editFormNameInput); 
-})
+// editFormNameInput.addEventListener('input', () => {
+//   isValid(profileEditForm, editFormNameInput); 
+// })
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});
