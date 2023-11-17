@@ -1,9 +1,10 @@
-// импорт
+// IMPORT <= <= <=
 
 import './pages/index.css';
 import {initialCards} from './components/cards.js';
 import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
+import {showInputError, hideInputError, isValid} from './components/validation.js';
 
 // DOM узлы
 
@@ -119,3 +120,10 @@ function handleAddCard(evt){
 }
 
 cardForm.addEventListener('submit', handleAddCard);
+
+
+// ВАЛИДАЦИЯ
+
+editFormNameInput.addEventListener('input', () => {
+  isValid(editFormNameInput); 
+})
