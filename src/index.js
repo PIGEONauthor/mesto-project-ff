@@ -4,7 +4,7 @@ import './pages/index.css';
 import {initialCards} from './components/cards.js';
 import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
-import {enableValidation} from './components/validation.js';
+import {enableValidation, clearValidation} from './components/validation.js';
 
 // DOM узлы
 
@@ -30,6 +30,17 @@ const closeButtonsList = document.querySelectorAll('.popup__close');
 
 const cardsPlace = document.querySelector('.places__list');
 
+//конфиг валидации
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
+
 // добавление карточки в контейнер
 
 function renderCard(data, conteiner){
@@ -50,6 +61,8 @@ profileEditButton.addEventListener('click', () => {
   editFormNameInput.value = profileName.textContent;
   editFormjobInput.value = profileTitle.textContent;
 
+  clearValidation(profileEditForm ,validationConfig);
+
   openModal(profileEditPopup);
 
 });
@@ -57,6 +70,8 @@ profileEditButton.addEventListener('click', () => {
 cardAddButton.addEventListener('click', () => {
   
   cardForm.reset();
+
+  clearValidation(cardForm ,validationConfig);
 
   openModal(cardAddPopup);
   
@@ -122,17 +137,6 @@ function handleAddCard(evt){
 cardForm.addEventListener('submit', handleAddCard);
 
 
-// ВАЛИДАЦИЯ
+// активация ВАЛИДАЦИИ
 
-// editFormNameInput.addEventListener('input', () => {
-//   isValid(profileEditForm, editFormNameInput); 
-// })
-
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-});
+enableValidation(validationConfig);
