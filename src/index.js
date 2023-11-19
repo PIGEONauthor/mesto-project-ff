@@ -5,7 +5,9 @@ import {initialCards} from './components/cards.js';
 import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
-import {getInitialCards} from './components/api.js';
+import {getInitialCards, getProfileInfo, updateProfileInfo} from './components/api.js';
+
+const promises = [getInitialCards, getProfileInfo];
 
 // DOM узлы
 
@@ -14,6 +16,7 @@ const profileEditButton = document.querySelector('.profile__edit-button');
 const profileEditForm = document.forms['edit-profile'];
 const editFormNameInput = profileEditForm.elements.name;
 const editFormjobInput = profileEditForm.elements.description;
+const profileAvatar = document.querySelector('.profile__image');
 const profileName = document.querySelector('.profile__title');
 const profileTitle = document.querySelector('.profile__description');
 
@@ -42,6 +45,10 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 }
 
+// карточки с сервера
+
+const newInitialCards = await getInitialCards();
+
 // добавление карточки в контейнер
 
 function renderCard(data, conteiner){
@@ -50,9 +57,15 @@ function renderCard(data, conteiner){
 
 }
 
-// Вывод карточек на страницу
+Promise.all(promises)
+.then(() => {
+  // Вывод карточек на страницу
+  newInitialCards.forEach( (el) => {renderCard(el, cardsPlace)} );
+  // данные профиля с сервера
+  getProfileInfo(profileName, profileTitle, profileAvatar);
+})
 
-initialCards.forEach( (el) => {renderCard(el, cardsPlace)} );
+//newInitialCards.forEach( (el) => {renderCard(el, cardsPlace)} );
 
 
 // открытие POPUP-ов
@@ -112,6 +125,8 @@ function handleProfileFormSubmit(evt){
   profileName.textContent = editFormNameInput.value;
   profileTitle.textContent = editFormjobInput.value;
 
+  updateProfileInfo(profileName.textContent, profileTitle.textContent);
+
   closeModal(profileEditPopup);
 
 }
@@ -141,7 +156,3 @@ cardForm.addEventListener('submit', handleAddCard);
 // активация ВАЛИДАЦИИ
 
 enableValidation(validationConfig);
-
-// API
-
-getInitialCards();
