@@ -1,11 +1,22 @@
 // IMPORT <= <= <=
 
 import './pages/index.css';
-import {initialCards} from './components/cards.js';
-import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
-import {openModal, closeModal} from './components/modal.js';
-import {enableValidation, clearValidation} from './components/validation.js';
-import {getInitialCards, getProfileInfo, updateProfileInfo} from './components/api.js';
+//import {initialCards} from './components/cards.js';
+import {
+  createCard,
+  handleDeleteCard,
+  handleLikeCard} from './components/card.js';
+import {
+  openModal,
+  closeModal} from './components/modal.js';
+import {
+  enableValidation,
+  clearValidation} from './components/validation.js';
+import {
+  getInitialCards,
+  getProfileInfo,
+  updateProfileInfo,
+  updateInitialCards} from './components/api.js';
 
 const promises = [getInitialCards, getProfileInfo];
 
@@ -45,10 +56,6 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 }
 
-// карточки с сервера
-
-const newInitialCards = await getInitialCards();
-
 // добавление карточки в контейнер
 
 function renderCard(data, conteiner){
@@ -59,14 +66,16 @@ function renderCard(data, conteiner){
 
 Promise.all(promises)
 .then(() => {
-  // Вывод карточек на страницу
-  newInitialCards.forEach( (el) => {renderCard(el, cardsPlace)} );
+  
+  getInitialCards()
+  .then(data => {
+    // Вывод карточек на страницу
+    data.forEach( (el) => {renderCard(el, cardsPlace)} )
+  });
   // данные профиля с сервера
   getProfileInfo(profileName, profileTitle, profileAvatar);
+
 })
-
-//newInitialCards.forEach( (el) => {renderCard(el, cardsPlace)} );
-
 
 // открытие POPUP-ов
 
@@ -125,6 +134,7 @@ function handleProfileFormSubmit(evt){
   profileName.textContent = editFormNameInput.value;
   profileTitle.textContent = editFormjobInput.value;
 
+  // отправка данных на сервер
   updateProfileInfo(profileName.textContent, profileTitle.textContent);
 
   closeModal(profileEditPopup);
@@ -144,6 +154,8 @@ function handleAddCard(evt){
     link: cardFormLinkInput.value,
   };
 
+  updateInitialCards(newCardData.name, newCardData.link);
+
   renderCard(newCardData, cardsPlace);
 
   closeModal(cardAddPopup);
@@ -156,3 +168,12 @@ cardForm.addEventListener('submit', handleAddCard);
 // активация ВАЛИДАЦИИ
 
 enableValidation(validationConfig);
+
+
+fetch('https://nomoreparties.co/v1/wff-cohort-1/cards', {
+  headers: {
+    authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4'
+  }
+})
+.then(res => res.json())
+.then(data => console.log(data))
