@@ -5,6 +5,7 @@ import {initialCards} from './components/cards.js';
 import {createCard, handleDeleteCard, handleLikeCard} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
+import {getInitialCards} from './components/api.js';
 
 // DOM узлы
 
@@ -140,3 +141,7 @@ cardForm.addEventListener('submit', handleAddCard);
 // активация ВАЛИДАЦИИ
 
 enableValidation(validationConfig);
+
+// API
+
+getInitialCards();
