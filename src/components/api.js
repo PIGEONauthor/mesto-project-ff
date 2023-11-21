@@ -32,6 +32,25 @@ const updateInitialCards = (cardName, cardLink) => {
 
 }
 
+// удаление карточки с сервера
+
+const deleteCards = (cardId) => {
+
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/cards/${cardId}`, {
+    method: 'DELETE',  
+    headers: {
+      authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4',
+      'Content-Type': 'application/json'
+    },
+    // body: JSON.stringify({
+    //   '_id': cardId
+    // })
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+
+}
+
 // получение профиля с сервера
 
 const getProfileInfo = (profileName, profileInfo, profileAvatar) => {
@@ -74,4 +93,10 @@ const updateProfileInfo = (profileName, profileInfo) => {
 
 // EXPORT => => =>
 
-export {getInitialCards, getProfileInfo, updateProfileInfo, updateInitialCards};
+export {
+  getInitialCards,
+  getProfileInfo,
+  updateProfileInfo,
+  updateInitialCards,
+  deleteCards
+};

@@ -4,7 +4,7 @@ import './pages/index.css';
 //import {initialCards} from './components/cards.js';
 import {
   createCard,
-  handleDeleteCard,
+  /*handleDeleteCard,*/
   handleLikeCard} from './components/card.js';
 import {
   openModal,
@@ -16,7 +16,8 @@ import {
   getInitialCards,
   getProfileInfo,
   updateProfileInfo,
-  updateInitialCards} from './components/api.js';
+  updateInitialCards,
+  deleteCards} from './components/api.js';
 
 const promises = [getInitialCards, getProfileInfo];
 
@@ -33,9 +34,12 @@ const profileTitle = document.querySelector('.profile__description');
 
 const cardAddPopup = document.querySelector('.popup_type_new-card');
 const cardAddButton = document.querySelector('.profile__add-button');
+const cardDeletePopup = document.querySelector('.popup_type_delete-card');
 const cardForm = document.forms['new-place'];
 const cardFormNameInput = cardForm.elements['place-name'];
 const cardFormLinkInput = cardForm.elements.link;
+const cardDeleteForm = document.forms['delete-card'];
+//const cardDeleteFormInput = cardDeleteForm.elements['id'];
 
 const cardPopup = document.querySelector('.popup_type_image');
 const cardPopupImage = cardPopup.querySelector('.popup__image');
@@ -60,7 +64,7 @@ const validationConfig = {
 
 function renderCard(data, conteiner){
 
-  conteiner.prepend(createCard(data, handleDeleteCard, handleOpenImage, handleLikeCard));
+  conteiner.prepend(createCard(data, handleOpenDeletePopup, handleOpenImage, handleLikeCard));
 
 }
 
@@ -69,10 +73,10 @@ Promise.all(promises)
   
   getInitialCards()
   .then(data => {
-    // Вывод карточек на страницу
+    // Вывод карточек с сервера на страницу
     data.forEach( (el) => {renderCard(el, cardsPlace)} )
   });
-  // данные профиля с сервера
+  // вывод данных профиля с сервера на страницу
   getProfileInfo(profileName, profileTitle, profileAvatar);
 
 })
@@ -93,7 +97,8 @@ profileEditButton.addEventListener('click', () => {
 cardAddButton.addEventListener('click', () => {
   
   cardForm.reset();
-
+  
+  //очистка ошибок валидации
   clearValidation(cardForm ,validationConfig);
 
   openModal(cardAddPopup);
@@ -107,6 +112,15 @@ function handleOpenImage(evt){
 
   openModal(cardPopup);
 
+}
+
+function handleOpenDeletePopup(id){
+
+  cardDeleteForm.dataset.id = '';
+  cardDeleteForm.dataset.id = id;
+
+  openModal(cardDeletePopup);
+  
 }
 
 // закрытие POPUP-ов по кнопке "X"
@@ -154,16 +168,34 @@ function handleAddCard(evt){
     link: cardFormLinkInput.value,
   };
 
-  updateInitialCards(newCardData.name, newCardData.link);
+  updateInitialCards(newCardData.name, newCardData.link)
+  .then(() => {
+    location.reload();
+  })
 
-  renderCard(newCardData, cardsPlace);
-
-  closeModal(cardAddPopup);
+  // renderCard(newCardData, cardsPlace);
+  // closeModal(cardAddPopup);
 
 }
 
 cardForm.addEventListener('submit', handleAddCard);
 
+// удаление карточки
+
+function handleremoveCard(evt){
+  
+  evt.preventDefault();
+  
+  deleteCards(cardDeleteForm.dataset.id)
+  .then(() => {
+    location.reload();
+  })
+  
+  // closeModal(cardDeletePopup);
+
+}
+
+cardDeleteForm.addEventListener('submit', handleremoveCard);
 
 // активация ВАЛИДАЦИИ
 
@@ -177,3 +209,5 @@ fetch('https://nomoreparties.co/v1/wff-cohort-1/cards', {
 })
 .then(res => res.json())
 .then(data => console.log(data))
+
+// https://img1.picmix.com/output/stamp/normal/1/5/7/8/1898751_ed403.png
