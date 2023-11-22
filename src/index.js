@@ -14,10 +14,12 @@ import {
   clearValidation} from './components/validation.js';
 import {
   getInitialCards,
-  getProfileInfo,
-  updateProfileInfo,
   updateInitialCards,
-  deleteCards} from './components/api.js';
+  deleteCards,
+  likeCard,
+  disLikeCard,
+  getProfileInfo,
+  updateProfileInfo} from './components/api.js';
 
 const promises = [getInitialCards, getProfileInfo];
 
@@ -31,6 +33,11 @@ const editFormjobInput = profileEditForm.elements.description;
 const profileAvatar = document.querySelector('.profile__image');
 const profileName = document.querySelector('.profile__title');
 const profileTitle = document.querySelector('.profile__description');
+
+const avatarEditPopup = document.querySelector('.popup_type_edit-avatar');
+const avatarEditButton = document.querySelector('.profile__image-edit');
+const avatarEditForm = document.forms['edit-avatar'];
+const avatarFormInput = avatarEditForm.elements.url;
 
 const cardAddPopup = document.querySelector('.popup_type_new-card');
 const cardAddButton = document.querySelector('.profile__add-button');
@@ -82,6 +89,16 @@ Promise.all(promises)
 })
 
 // открытие POPUP-ов
+
+avatarEditButton.addEventListener('click', () => {
+  
+  avatarEditForm.reset();
+  
+  clearValidation(avatarEditForm ,validationConfig);
+  
+  openModal(avatarEditPopup);
+  
+})
 
 profileEditButton.addEventListener('click', () => {
 
@@ -208,6 +225,6 @@ fetch('https://nomoreparties.co/v1/wff-cohort-1/cards', {
   }
 })
 .then(res => res.json())
-.then(data => console.log(data))
+.then(data => console.log(data[0]))
 
 // https://img1.picmix.com/output/stamp/normal/1/5/7/8/1898751_ed403.png

@@ -42,12 +42,41 @@ const deleteCards = (cardId) => {
       authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4',
       'Content-Type': 'application/json'
     },
-    // body: JSON.stringify({
-    //   '_id': cardId
-    // })
   })
   .then(res => res.json())
   .then(data => console.log(data))
+
+}
+
+// лпоставить лайк
+
+const likeCard = (cardId) => {
+
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/cards/likes/${cardId}`, {
+    method: 'PUT',  
+    headers: {
+      authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4',
+      'Content-Type': 'application/json'
+    },
+  })
+  // .then(res => res.json())
+  // .then(data => console.log(data))
+
+}
+
+// убрать лайк
+
+const disLikeCard = (cardId) => {
+
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/cards/likes/${cardId}`, {
+    method: 'DELETE',  
+    headers: {
+      authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4',
+      'Content-Type': 'application/json'
+    },
+  })
+  // .then(res => res.json())
+  // .then(data => console.log(data))
 
 }
 
@@ -95,8 +124,10 @@ const updateProfileInfo = (profileName, profileInfo) => {
 
 export {
   getInitialCards,
+  updateInitialCards,
+  deleteCards,
+  likeCard,
+  disLikeCard,
   getProfileInfo,
   updateProfileInfo,
-  updateInitialCards,
-  deleteCards
 };
