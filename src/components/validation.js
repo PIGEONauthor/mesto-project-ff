@@ -134,5 +134,4 @@ function clearValidation(form, validationConfig) {
 }
 
 // EXPORT => => =>
-
 export {enableValidation, clearValidation};

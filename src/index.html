@@ -113,8 +113,8 @@
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Вы уверены?</h3>
-      <form class="popup__form" name="delete-card" data-id="">
-        <button type="submit" class="button popup__button">Да</button>
+      <form class="popup__form" name="delete-card">
+        <button type="submit" class="button popup__button" data-id="">Да</button>
       </form>
     </div>
   </div>
@@ -122,7 +122,7 @@
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Обновить аватар</h3>
-      <form class="popup__form" name="edit-avatar" data-id="">
+      <form class="popup__form" name="edit-avatar">
         <input
           type="url"
           name="url"
@@ -139,7 +139,7 @@
 </div>
 
 <template id="card-template">
-  <li class="places__item card">
+  <li class="places__item card" id="">
     <img class="card__image" src="" alt="" />
     <button type="button" class="card__delete-button"></button>
     <div class="card__description">

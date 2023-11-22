@@ -1,7 +1,3 @@
-// экспорт
-
-export {openModal, closeModal};
-
 /*
   *********ОПИСАНИЕ МОДУЛЯ*********
 
@@ -98,3 +94,6 @@ function handleCloseByOverlay(evt){
   }
 
 }
+
+// EXPORT => => =>
+export {openModal, closeModal};
