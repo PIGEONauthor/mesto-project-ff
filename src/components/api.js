@@ -59,8 +59,6 @@ const likeCard = (cardId) => {
       'Content-Type': 'application/json'
     },
   })
-  // .then(res => res.json())
-  // .then(data => console.log(data))
 
 }
 
@@ -75,8 +73,6 @@ const disLikeCard = (cardId) => {
       'Content-Type': 'application/json'
     },
   })
-  // .then(res => res.json())
-  // .then(data => console.log(data))
 
 }
 
@@ -120,6 +116,23 @@ const updateProfileInfo = (profileName, profileInfo) => {
 
 }
 
+// обновление аватара
+
+const changeAvatar = (url) => {
+
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/users/me/avatar`, {
+    method: 'PATCH',  
+    headers: {
+      authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      avatar: url
+    })
+  })
+
+}
+
 // EXPORT => => =>
 
 export {
@@ -130,4 +143,5 @@ export {
   disLikeCard,
   getProfileInfo,
   updateProfileInfo,
+  changeAvatar
 };

@@ -19,7 +19,8 @@ import {
   likeCard,
   disLikeCard,
   getProfileInfo,
-  updateProfileInfo} from './components/api.js';
+  updateProfileInfo,
+  changeAvatar} from './components/api.js';
 
 const promises = [getInitialCards, getProfileInfo];
 
@@ -97,7 +98,7 @@ avatarEditButton.addEventListener('click', () => {
   clearValidation(avatarEditForm ,validationConfig);
   
   openModal(avatarEditPopup);
-  
+
 })
 
 profileEditButton.addEventListener('click', () => {
@@ -174,6 +175,23 @@ function handleProfileFormSubmit(evt){
 
 profileEditForm.addEventListener('submit', handleProfileFormSubmit);
 
+// обновление аватара
+
+function handleAvatarChanging(evt) {
+
+  evt.preventDefault()
+
+  const newAvatarUrl = avatarFormInput.value;
+
+  changeAvatar(newAvatarUrl)
+  .then(() => {
+    location.reload();
+  })
+
+}
+
+avatarEditForm.addEventListener('submit', handleAvatarChanging);
+
 // добавление новой карточки
 
 function handleAddCard(evt){
@@ -227,4 +245,3 @@ fetch('https://nomoreparties.co/v1/wff-cohort-1/cards', {
 .then(res => res.json())
 .then(data => console.log(data[0]))
 
-// https://img1.picmix.com/output/stamp/normal/1/5/7/8/1898751_ed403.png
