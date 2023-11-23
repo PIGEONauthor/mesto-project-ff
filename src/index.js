@@ -61,6 +61,8 @@ const closeButtonsList = document.querySelectorAll('.popup__close');
 
 const cardsPlace = document.querySelector('.places__list');
 
+let myId = '';
+
 // КОНФИГ ВАЛИДАЦИИ
 const validationConfig = {
   formSelector: '.popup__form',
@@ -74,29 +76,30 @@ const validationConfig = {
 // ДОБАВЛЕНИЕ КАРТОЧКИ В КОНТЕЙНЕР
 function renderCard(data, conteiner){
 
-  conteiner.append(createCard(data, handleOpenDeletePopup, handleOpenImage, handleLikeCard));
+  conteiner.append(createCard(data, handleOpenDeletePopup, handleOpenImage, handleLikeCard, myId));
 
 }
 
 // ВЫВОД ДАННЫХ НА СТРАНИЦУ
 Promise.all(promises)
 .then(() => {
+  
+  // вывод данных профиля с сервера на страницу
+  getProfileInfo()
+  .then((data) => {
+    myId = data['_id'];
+    profileName.textContent = data.name;
+    profileTitle.textContent = data.about;
+    profileAvatar.style.backgroundImage = `url('${data.avatar}')`;
+  })
+  .catch(console.error);
 
   getInitialCards()
   .then(data => {
     // Вывод карточек с сервера на страницу
     data.forEach( (el) => {renderCard(el, cardsPlace)} )
-  });
-  // вывод данных профиля с сервера на страницу
-  getProfileInfo()
-  .then((data) => {
-    profileName.textContent = data.name;
-    profileTitle.textContent = data.about;
-    profileAvatar.style.backgroundImage = `url('${data.avatar}')`;
   })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-  });
+  .catch(console.error)
 
 })
 
@@ -124,14 +127,14 @@ profileEditButton.addEventListener('click', () => {
 });
 
 cardAddButton.addEventListener('click', () => {
-  
+
   cardForm.reset();
-  
+
   //очистка ошибок валидации
   clearValidation(cardForm ,validationConfig);
 
   openModal(cardAddPopup);
-  
+
 });
 
 function handleOpenImage(evt){
@@ -179,9 +182,7 @@ function handleProfileFormSubmit(evt){
     profileTitle.textContent = data.about;
     closeModal(profileEditPopup);
   })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-  })
+  .catch(console.error)
   .finally(() => {
     editFormSubmitButton.textContent = 'Сохранить';
   });
@@ -204,9 +205,7 @@ function handleAvatarChanging(evt) {
     profileAvatar.style.backgroundImage = `url('${data.avatar}')`;
     closeModal(avatarEditPopup);
   })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-  })
+  .catch(console.error)
   .finally(() => {
     avatarFormSubmitButton.textContent = 'Сохранить';
   });
@@ -233,9 +232,7 @@ function handleAddCard(evt){
     //renderCard(data, cardsPlace);
     closeModal(cardAddPopup);
   })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-  })
+  .catch(console.error)
   .finally(() => {
     cardFormSubmitButton.textContent = 'Сохранить';
   });
@@ -257,9 +254,7 @@ function handleremoveCard(evt){
     deleteTarget.remove();
     closeModal(cardDeletePopup);
   })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-  });
+  .catch(console.error);
 
 }
 
@@ -267,13 +262,3 @@ cardDeleteForm.addEventListener('submit', handleremoveCard);
 
 // АКТИВАЦИЯ ВАЛИДАЦИИ
 enableValidation(validationConfig);
-
-
-fetch('https://nomoreparties.co/v1/wff-cohort-1/cards', {
-  headers: {
-    authorization: '278bb077-1673-45bd-9597-3e9d7ec352d4'
-  }
-})
-.then(res => res.json())
-.then(data => console.log(data))
-
